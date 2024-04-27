@@ -1,27 +1,25 @@
 package com.dicoding.asclepius.view
 
-import android.Manifest
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import com.dicoding.asclepius.R
 import com.dicoding.asclepius.databinding.ActivityMainBinding
+import com.yalantis.ucrop.UCrop
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
     private var currentImageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         binding.galleryButton.setOnClickListener {
             startGallery()
         }
@@ -39,14 +37,36 @@ class MainActivity : AppCompatActivity() {
     ) { uri: Uri? ->
         uri?.let {
             currentImageUri = it
-            showImage()
+            cropImage(it)
         }
     }
 
+    private fun cropImage(uri: Uri) {
+        val options = UCrop.Options()
+        options.setCompressionQuality(70)
+
+        val destinationUri = Uri.fromFile(File(cacheDir, "cropped_image.jpg"))
+        UCrop.of(uri, destinationUri)
+            .withOptions(options)
+            .start(this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+            val resultUri = UCrop.getOutput(data!!)
+            currentImageUri = resultUri
+            showImage()
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            val cropError = UCrop.getError(data!!)
+            showToast("Failed to crop image: $cropError")
+        }
+    }
 
     private fun showImage() {
-        // TODO: Menampilkan gambar sesuai Gallery yang dipilih.
+        // TODO: Mendapatkan gambar dari Gallery.
         currentImageUri?.let { uri ->
+            binding.previewImageView.setImageURI(null)
             binding.previewImageView.setImageURI(uri)
         }
     }
