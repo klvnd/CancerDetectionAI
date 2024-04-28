@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CancerDetectAI</string>
     <string name="gallery">Galeri</string>
+    <string name="desc">"An early cancer detection app powered by Artificial Intelegent technologi. Scan skin photos from your phone's gallery and access valuable health information at your fingertips."</string>
     <string name="analyze">Analyze</string>
     <string name="result">Analysis Results</string>
     <string name="result_confidence_score">100%</string>
