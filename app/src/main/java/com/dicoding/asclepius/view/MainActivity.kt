@@ -2,11 +2,11 @@ package com.dicoding.asclepius.view
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.asclepius.databinding.ActivityMainBinding
 import com.yalantis.ucrop.UCrop
 import java.io.File
@@ -22,6 +22,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.galleryButton.setOnClickListener {
             startGallery()
+        }
+
+        binding.analyzeButton.setOnClickListener {
+            analyzeImage()
         }
     }
 
@@ -42,12 +46,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun cropImage(uri: Uri) {
-        val options = UCrop.Options()
-        options.setCompressionQuality(70)
+//        val options = UCrop.Options()
+//        options.setCompressionQuality(70)
 
         val destinationUri = Uri.fromFile(File(cacheDir, "cropped_image.jpg"))
         UCrop.of(uri, destinationUri)
-            .withOptions(options)
+//            .withOptions(options)
             .start(this)
     }
 
@@ -73,10 +77,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun analyzeImage() {
         // TODO: Menganalisa gambar yang berhasil ditampilkan.
+        if (currentImageUri != null) {
+            moveToResult()
+        } else {
+            showToast("No image selected. Please select an image first.")
+        }
     }
 
     private fun moveToResult() {
         val intent = Intent(this, ResultActivity::class.java)
+        intent.putExtra("imageUri", currentImageUri.toString())
         startActivity(intent)
     }
 
