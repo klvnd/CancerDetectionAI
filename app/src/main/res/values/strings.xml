@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">CancerDetectAI</string>
-    <string name="camera_x">CameraX</string>
-    <string name="camera">Kamera</string>
     <string name="gallery">Galeri</string>
     <string name="analyze">Analyze</string>
-    <string name="result">Hasil Analisis</string>
-
+    <string name="result">Analysis Results</string>
+    <string name="result_confidence_score">100%</string>
+    <string name="disclaimer">Disclaimer</string>
+    <string name="disclaimer_text">This AI-powered cancer detection app is intended for informational purposes only and should not be considered a substitute for professional medical advice, diagnosis, or treatment.</string>
+    <string name="image_clasifier_failed">Analyzed Failed</string>
     <string name="image_classifier_failed">Image classifier failed to initialize. See error logs for details</string>
 
 </resources>
