@@ -31,8 +31,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun startGallery() {
         // TODO: Mendapatkan gambar dari Gallery.
-        launcherGallery.launch(PickVisualMediaRequest(
-            ActivityResultContracts.PickVisualMedia.ImageOnly)
+        launcherGallery.launch(
+            PickVisualMediaRequest(
+                ActivityResultContracts.PickVisualMedia.ImageOnly
+            )
         )
     }
 
@@ -42,6 +44,9 @@ class MainActivity : AppCompatActivity() {
         uri?.let {
             currentImageUri = it
             cropImage(it)
+        }?: run {
+            currentImageUri = null
+            showToast("Image Selection Cancelled")
         }
     }
 
@@ -64,6 +69,9 @@ class MainActivity : AppCompatActivity() {
         } else if (resultCode == UCrop.RESULT_ERROR) {
             val cropError = UCrop.getError(data!!)
             showToast("Failed to crop image: $cropError")
+        } else if (resultCode == RESULT_CANCELED && requestCode == UCrop.REQUEST_CROP) {
+            currentImageUri = null
+            showToast("Image cropping cancelled")
         }
     }
 
